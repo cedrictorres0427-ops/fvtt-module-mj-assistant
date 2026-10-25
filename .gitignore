@@ -1,0 +1,6 @@
+# LevelDB runtime files, recreated by Foundry
+LOCK
+LOG
+LOG.old
+.DS_Store
+Thumbs.db

@@ -1,0 +1,119 @@
+{{!-- Panneau MJ Assistant - Jalon 3.6 --}}
+<div class="mj-assistant-panel">
+
+  <header class="mj-assistant-header">
+    <h2><i class="fas fa-robot"></i> Muses</h2>
+    <p class="mj-assistant-subtitle">IA personnelles des PJ — Eclipse Phase</p>
+  </header>
+
+  <section class="mj-section">
+    <h3 class="mj-section-title"><i class="fas fa-info-circle"></i> Statut</h3>
+
+    <div class="status-row">
+      <span class="status-label">Système :</span>
+      {{#if enabled}}
+        <span class="status-value status-active">● Actif</span>
+      {{else}}
+        <span class="status-value status-inactive">● Inactif</span>
+      {{/if}}
+    </div>
+
+    <div class="status-row">
+      <span class="status-label">User relais :</span>
+      {{#if museUserFound}}
+        <span class="status-value status-active">{{museUserName}} ✓</span>
+      {{else}}
+        <span class="status-value status-inactive">{{museUserName}} ✗</span>
+      {{/if}}
+    </div>
+
+    <div class="status-row">
+      <span class="status-label">Backend :</span>
+      <span class="status-value status-backend">{{backendUrl}}</span>
+    </div>
+
+    {{#unless museUserFound}}
+      <p class="mj-warning">
+        <i class="fas fa-exclamation-triangle"></i>
+        Crée un <b>user</b> (pas un acteur) nommé <b>{{museUserName}}</b> dans <i>Game Settings → Manage Players</i>, rôle Player, mot de passe vide.
+      </p>
+    {{/unless}}
+  </section>
+
+  <section class="mj-section">
+    <h3 class="mj-section-title"><i class="fas fa-book"></i> Base de connaissance</h3>
+
+    {{#if selectedJournalsCount}}
+      <p class="mj-hint">{{selectedJournalsCount}} journal(aux) :</p>
+      <ul class="mj-journals-list">
+        {{#each selectedJournals as |j|}}
+          <li><i class="fas fa-book-open"></i> <b>{{j.name}}</b> <small>({{j.pageCount}}p)</small></li>
+        {{/each}}
+      </ul>
+    {{else}}
+      <p class="mj-empty">Aucun journal sélectionné.</p>
+    {{/if}}
+
+    <button type="button" data-action="selectJournals" class="mj-btn mj-btn-primary">
+      <i class="fas fa-list-check"></i> Sélectionner les journaux
+    </button>
+  </section>
+
+  <section class="mj-section">
+    <h3 class="mj-section-title"><i class="fas fa-users"></i> Muses par PJ ({{pjCount}})</h3>
+
+    {{#if pjCount}}
+      <div class="mj-pj-list">
+        {{#each pjList as |pj|}}
+          <div class="mj-pj-row">
+            <img class="mj-pj-img" src="{{pj.img}}" alt="{{pj.name}}" />
+            <div class="mj-pj-info">
+              <div class="mj-pj-name">{{pj.name}}</div>
+              {{#if pj.hasMuse}}
+                <div class="mj-pj-muse"><i class="fas fa-sparkles"></i> <b>{{pj.museName}}</b></div>
+                {{#if pj.musePersonality}}
+                  <div class="mj-pj-perso">{{pj.musePersonality}}</div>
+                {{/if}}
+              {{else}}
+                <div class="mj-pj-no-muse">Aucune muse assignée</div>
+              {{/if}}
+            </div>
+            <div class="mj-pj-actions">
+              <button type="button" data-action="editMuse" data-pj-id="{{pj.id}}" class="mj-btn-icon" title="Configurer">
+                <i class="fas fa-edit"></i>
+              </button>
+              {{#if pj.hasMuse}}
+                <button type="button" data-action="clearMuse" data-pj-id="{{pj.id}}" class="mj-btn-icon mj-btn-icon-danger" title="Retirer">
+                  <i class="fas fa-times"></i>
+                </button>
+              {{/if}}
+            </div>
+          </div>
+        {{/each}}
+      </div>
+    {{else}}
+      <p class="mj-empty">Aucun personnage joueur.</p>
+    {{/if}}
+  </section>
+
+  <section class="mj-section">
+    <h3 class="mj-section-title"><i class="fas fa-cogs"></i> Contrôles</h3>
+    <div class="mj-section-actions">
+      <button type="button" data-action="toggleEnabled" class="mj-btn">
+        {{#if enabled}}<i class="fas fa-pause"></i> Désactiver{{else}}<i class="fas fa-play"></i> Activer{{/if}}
+      </button>
+      <button type="button" data-action="testBackend" class="mj-btn mj-btn-test">
+        <i class="fas fa-vial"></i> Test backend
+      </button>
+    </div>
+  </section>
+
+  <section class="mj-section mj-section-help">
+    <h3 class="mj-section-title"><i class="fas fa-question-circle"></i> Utilisation</h3>
+    <div class="mj-help-block">
+      <p><b>PJ :</b> <code>/w {{museUserName}} ma valeur en kinésique ?</code></p>
+      <p><b>MJ :</b> <code>/w {{museUserName}} Dit à Bob que tu détectes une intrusion</code></p>
+    </div>
+  </section>
+
+</div>
